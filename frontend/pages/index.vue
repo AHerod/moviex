@@ -1,13 +1,25 @@
 <template>
   <v-row justify="center" align="center">
     <v-col class="d-flex">
-      <v-card v-for="(movie, index) in movies" :key="index" class="pa-4 ma-4">
-        <v-img
-          height="250"
-          :src="'http://localhost:1337' + movie.cover.url"
-        ></v-img>
+      <v-card v-for="(movie, index) in movies" :key="index" class="pa-4 ma-4"
+              @mouseenter="moviesList[index]=true;" @mouseleave="moviesList[index]=false">
+        <div class="relative">
+          <v-btn
+            v-if="moviesList[index]"
+            class="absolute"
+            color="primary"
+            nuxt
+            to="/inspire"
+          >
+            More
+          </v-btn>
+          <v-img
+            height="250"
+            :src="'http://localhost:1337' + movie.cover.url"
+          ></v-img>
+        </div>
         <v-card-title class="headline">
-          {{movie.Title}}
+          {{ movie.Title }}
         </v-card-title>
         <v-card-text>
           <p>
@@ -15,14 +27,16 @@
           </p>
         </v-card-text>
         <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
+          <v-spacer/>
+          <v-chip
+            class="mx-1"
+            color="orange"
+            link
+            outlined
+            pill
+            v-for="(tag,index) in movie.tags"
+            :key="index"> {{ tag.label }}
+          </v-chip>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -43,6 +57,7 @@ export default {
     return {
       // Initialize an empty restaurants variabkle
       movies: [],
+      moviesList: [],
       query: ''
     }
   },
@@ -52,5 +67,8 @@ export default {
       query: moviesQuery
     }
   },
+  mounted() {
+    this.movies.forEach((el, index) => this.moviesList.push(false));
+  }
 }
 </script>

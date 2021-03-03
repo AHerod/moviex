@@ -4,6 +4,9 @@ query Movies {
     brief
     cover {
       url
+    },
+    tags {
+      label
     }
   }
 }
